@@ -26,7 +26,7 @@ body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#f89b9b;
+    background-color:#dbedf7;
 
     font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
     font-size:12px;
@@ -36,7 +36,7 @@ body {
 
 /* Portrait layout (default) */
 .app {
-	
+	border: solid thin black;
     /*position:absolute;             /* position in the center of the screen */
     /*left:50%;
     top:50%;
@@ -118,6 +118,12 @@ h1 {
 	margin: 0 auto;
 	padding: 5em;
 	text-align: center;
+}
+
+input {
+	border-radius: 10px;
+	padding: .5em;
+	margin: .5em;
 }
 
 
