@@ -37,22 +37,19 @@
         	<div id='topbar'></div>
             
             <div id='content'>
-	            <input type='text' name='search'/>
-	            <input type='submit' name='submit' value='Submit' />
+	            <div id='tt'></div>
             </div>
         </div>
-        <script src='jquery-2.1.3.min.js'></script>
+        <script type="text/javascript" src='jquery-2.1.3.min.js'></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
             app.initialize();
         </script>
         
-        <script>
+        <script type="text/javascript">
 	        $(document).ready(function() {
-		        $('input[name="submit"]').on('click', function() {
-			        $('input[name="search"]').before("<p>"+$('input[name="search"]').val()+"</p>")
-		        });
+		        
 	        });
         </script>
         

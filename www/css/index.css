@@ -20,6 +20,7 @@
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
     margin: 0;
     padding: 0;
+    border: solid thin black;
 }
 
 body {
@@ -121,10 +122,14 @@ h1 {
 	text-align: center;
 }
 
-input {
+#tt {
+	width: 8em;
+	height: 3em;
+	background:#ca9292;
 	border-radius: 10px;
 	padding: .5em;
 	margin: .5em;
+	margin: 0 auto;
 }
 
 
