@@ -65,6 +65,10 @@ $(document).ready(function() {
 	$('#search').keypress(function( event ) {
 		if ( event.which == 13 ) {
 			event.preventDefault();
+			$("input[name='query']").blur(); //for ios
+			//var softkeyboard = window.cordova.plugins.SoftKeyBoard;
+			//softkeyboard.hide();
+			
 			$('#content').html('');
 			var query = $q.val();
 			var url = 	"http://developer.echonest.com/api/v4/artist/search?api_key=" +
