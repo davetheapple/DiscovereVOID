@@ -115,10 +115,11 @@ $(document).ready(function() {
 					for(var index = 0; index < $artists.length; index++) {
 						var imageUrl = $artists[index].images[index].url;
 						
-						var tags = "";
+						var tags = "<p>";
 						$($artists[index].genres).each(function(index, value){
 							tags += "#"+value.name+" ";
 						});
+						tags += "</p>";
 						
 						var name = "<h2 id='name'>"+$artists[index].name+"</h2>";
 						var cell = "<div class='cell' id='art"+(index+1)+"'>"+name+tags+"</div>";
