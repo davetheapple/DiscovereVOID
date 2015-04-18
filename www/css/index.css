@@ -114,7 +114,8 @@ h1 {
 }
 
 #content {
-	width: 80%;
+	border: solid thin black;
+	width: 50%;
 	margin: 0 auto;
 	padding: 5em;
 	text-align: center;
