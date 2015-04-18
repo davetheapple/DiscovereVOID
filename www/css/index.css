@@ -133,6 +133,7 @@ input[name='query'] {
 .cell {
 	position: relative;
 	z-index: 0;
+	background: #251c1c;
 	background-size: 100%;
 	background-position-y: -100px;
 	height: 5em;

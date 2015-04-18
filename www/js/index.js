@@ -48,11 +48,11 @@ $(document).ready(function() {
 		
 		if($q.css('visibility') != 'visible') {
 			$q.css('visibility', 'visible');
-			$q.animate({width: '75%', opacity: '.85'}, 500, function() {
+			$q.transition({width: '75%', opacity: '.85'}, 500, function() {
 				// none
 			});
 		} else if($q.css('visibility') == 'visible' && !$q.is(':focus')) {
-			$q.animate({width: '0', opacity: '0'}, 500, function() { 
+			$q.transition({width: '0', opacity: '0'}, 500, function() { 
 				$q.css('visibility', 'hidden'); 
 			});
 		}
@@ -61,6 +61,7 @@ $(document).ready(function() {
 	$('#search').keypress(function( event ) {
 		if ( event.which == 13 ) {
 			event.preventDefault();
+			$('#content').html('');
 			var query = $q.val();
 			var url = 	"http://developer.echonest.com/api/v4/artist/search?api_key=" +
 						"DW2FLRWMOF77QF6S8" +
