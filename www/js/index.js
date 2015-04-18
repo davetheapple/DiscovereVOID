@@ -96,17 +96,17 @@ $(document).ready(function() {
 				$artists = data.response.artists;
 				var imageUrl = $artists[0].images[0].url;
 				
-				var tags = "";
+				var tags = "<p>";
 				$($artists[0].genres).each(function(index, value){
 					tags += "#"+value.name+" ";
 				});
-				
+				tags += "</p>";
 				var name = "<h2 id='name'>"+$artists[0].name+"</h2>";
 				var cell = "<div class='cell' id='art0'>"+name+tags+"</div>";
 				
 				$('#content').append(cell);
 				$('.cell').css({
-					'background-image': 'url('+imageUrl+')'
+					//'background-image': 'url('+imageUrl+')'
 				});
 				
 				$.get(similarUrl, function(data2, status2) {
@@ -126,7 +126,7 @@ $(document).ready(function() {
 						
 						$('#content').append(cell);
 						$('#art'+(index+1)).css({
-							'background-image': 'url('+imageUrl+')'
+							//'background-image': 'url('+imageUrl+')'
 						});
 					}
 				});
