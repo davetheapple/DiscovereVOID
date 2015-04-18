@@ -95,7 +95,7 @@ body {
 
 #search {
 	width: 80%;
-	margin: 1em auto;
+	margin: 0 auto;
 	text-align: center;
 }
 
@@ -109,7 +109,6 @@ body {
 
 input[name='query'] {
 	position: relative;
-	visibility: hidden;
 	width: 0;
 	height: 2em;
 	margin-top: 2em;
@@ -117,9 +116,11 @@ input[name='query'] {
 	padding-left: 2.5em;
 	border-radius: 5px;
 	border: solid thin white;
-	opacity: .85;
+	opacity: 0;
 	z-index: 0;
 	border: solid 0 #5f84a7;
+	transition: width 1s, opacity 1s;
+	-webkit-transition: width 1s, opacity 1s;
 	
 }
 
