@@ -123,6 +123,7 @@ input[name='query'] {
 	border: solid 0 #5f84a7;
 	transition: width 1s, opacity 1s;
 	-webkit-transition: width 1s, opacity 1s;
+	transform: translate3d(0,0,0);
 	
 }
 

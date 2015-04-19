@@ -54,6 +54,7 @@ $(document).ready(function() {
 	});
 	
 	$('#content').on('click', '.cell', function() {
+		$(this).animate({opacity: '.5'}, function() { $(this).animate({opacity: '.9'}); });
 		var $name = $(this).children('h2').text();
 		var $tags = $(this).children('p').text();
 		var $imgurl = $(this).children('img').attr('src');
