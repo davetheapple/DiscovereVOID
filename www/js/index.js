@@ -126,8 +126,11 @@ $(document).ready(function() {
 				
 				$('#content').append(cell);
 				var r = Math.floor((Math.random()*3) + 1);
+				
+				var optimized_img = optimize(imageUrl);
+				
 				$('#art0').css({
-					'background-image': 'url(img/placeholder'+r+'.jpg)'
+					'background-image': 'url('+optimized_img+')'//'url(img/placeholder'+r+'.jpg)'
 				});
 				$('#art0').slideDown("slow");
 				
@@ -148,10 +151,10 @@ $(document).ready(function() {
 						var cell = "<div class='cell' id='art"+(index+1)+"'>"+name+tags+img+"</div>";
 						
 						$('#content').append(cell);
-						
+						var optimized_img = optimize(imageUrl);
 						var r = Math.floor((Math.random()*3) + 1);
 						$('#art'+(index+1)).css({
-							'background-image': 'url(img/placeholder'+r+'.jpg)'
+							'background-image': 'url('+optimize(imageUrl)+')'//'url(img/placeholder'+r+'.jpg)'
 						});
 						$('#art'+(index+1)).slideDown("slow");
 					}
@@ -167,6 +170,15 @@ $(document).ready(function() {
 			
 		}
 	});
+	
+	function optimize(url) {
+		var optimized_img = "";
+		var u = "http://franciscompany.org/process_image.php?img_url="+url;
+		$.get(u, function(data, status) {
+			optimized_img = data;
+		});
+		return optimized_img;
+	}
 });
 
 
