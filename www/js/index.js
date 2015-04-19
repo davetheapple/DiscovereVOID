@@ -60,7 +60,11 @@ $(document).ready(function() {
 		var $imgurl = $(this).children('img').attr('src');
 		console.debug($(this).children('img'));
 		var $html = "<div id='header'><h2>"+$name+"</h2><p>"+$tags+"</p></div>"
-		//$('#content').html($html); /*
+		$('#content').html($html);
+		$('#header').css({
+				  'background-image': "url('"+$imgurl+"')"
+			});
+		 /*
 		// swipe out old view
 		$('#content').hide("slide", { direction: "left" }, 500, function() {		
 			$('#content').html($html); // insert new one
@@ -70,7 +74,7 @@ $(document).ready(function() {
 			});
 		}); 
 		// slide in new view
-		$('#content').show("slide", { direction: "right" }, 500, function() {});
+		$('#content').show("slide", { direction: "right" }, 500, function() {});*/
 		
 	});
 	
