@@ -43,31 +43,20 @@ var app = {
 
 $(document).ready(function() {
 	var $q = $('input[name="query"]');
-	//$q.css('visibility', 'hidden');
+	
 	$('#search').on('click', function() {
 		console.log($q.css('width'));
-		if(parseFloat($q.css('width')) <= 0) { //($q.css('visibility') != 'visible') {
-			/*$q.css('visibility', 'visible');
-			$q.transition({width: '75%', opacity: '.85'}, 1000, function() {
-				// none
-			});*/
-			$q.css({width: '75%', opacity: '.85'});
-		} else if(parseFloat($q.css('width')) >= 0 && !$q.is(':focus')) { // $q.css('visibility') == 'visible' &&
-			
+		if(parseFloat($q.css('width')) <= 0) {
+			$q.css({width: '55%', opacity: '.85'});
+		} else if(parseFloat($q.css('width')) >= 0 && !$q.is(':focus')) {
 			$q.css({width: '0', opacity: '0'});
-			
-			/*$q.transition({width: '0', opacity: '0'}, 1000, function() { 
-				$q.css('visibility', 'hidden'); 
-			});*/
 		}
 	});
 	
 	$('#search').keypress(function( event ) {
 		if ( event.which == 13 ) {
 			event.preventDefault();
-			$("input[name='query']").blur(); //for ios
-			//var softkeyboard = window.cordova.plugins.SoftKeyBoard;
-			//softkeyboard.hide();
+			$q.blur();
 			
 			$('#content').html('');
 			var query = $q.val();
