@@ -103,8 +103,10 @@ $(document).ready(function() {
 				var cell = "<div class='cell' id='art0'>"+name+tags+"</div>";
 				
 				$('#content').append(cell);
-				$('.cell').css({
-					//'background-image': 'url('+imageUrl+')'
+				var r = Math.floor((Math.random()*3) + 1);
+				$('#art0').css({
+					'background-image': 'url(img/placeholder'+r+'.jpg)',
+					opacity: '.9'
 				});
 				
 				$.get(similarUrl, function(data2, status2) {
@@ -123,10 +125,15 @@ $(document).ready(function() {
 						var cell = "<div class='cell' id='art"+(index+1)+"'>"+name+tags+"</div>";
 						
 						$('#content').append(cell);
+						var r = Math.floor((Math.random()*3) + 1);
 						$('#art'+(index+1)).css({
-							//'background-image': 'url('+imageUrl+')'
+							'background-image': 'url(img/placeholder'+r+'.jpg)',
+							opacity: '.9'
 						});
 					}
+					window.plugins.toast.show('(ﾉ≧∀≦)ﾉ Success!', 'long', 'bottom', 
+											function(a){console.log('toast success: ' + a)}, 
+											function(b){alert('toast error: ' + b)})
 				});
 				
 				
