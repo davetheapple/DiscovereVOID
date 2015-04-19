@@ -34,11 +34,20 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+        document.addEventListener("backbutton", backKeyDown, true);
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         
     }
+    
+    backKeyDown: function() { 
+	    // do something here if you wish
+	    // alert('go back!');
+	    window.plugins.toast.show('(ﾉ≧∀≦)ﾉ Success!', 'long', 'bottom', 
+											function(a){console.log('toast success: ' + a)}, 
+											function(b){alert('toast error: ' + b)})
+	}
 };
 
 $(document).ready(function() {
