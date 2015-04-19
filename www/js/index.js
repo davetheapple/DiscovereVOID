@@ -44,26 +44,16 @@ var app = {
 $(document).ready(function() {
 	var $q = $('input[name="query"]');
 	
-	$('#search').on('click', function() {
-		console.log($q.css('width'));
-		if(parseFloat($q.css('width')) <= 0) {
-			$q.css({width: '55%', opacity: '.85'});
-		} else if(parseFloat($q.css('width')) >= 0 && !$q.is(':focus')) {
-			$q.css({width: '0', opacity: '0'});
-		}
-	});
-	
 	$('#content').on('click', '.cell', function() {
 		$(this).animate({opacity: '.5'}, function() { $(this).animate({opacity: '.9'}); });
 		var $name = $(this).children('h2').text();
 		var $tags = $(this).children('p').text();
 		var $imgurl = $(this).children('img').attr('src');
-		console.debug($(this).children('img'));
 		var $html = "<div id='header'><h2>"+$name+"</h2><p>"+$tags+"</p></div>"
 		$('#content').html($html);
 		$('#header').css({
-				  'background-image': "url('"+$imgurl+"')"
-			});
+			  'background-image': "url('"+$imgurl+"')"
+		});
 		 /*
 		// swipe out old view
 		$('#content').hide("slide", { direction: "left" }, 500, function() {		
