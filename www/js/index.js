@@ -127,7 +127,7 @@ $(document).ready(function() {
 				$('#content').append(cell);
 				var r = Math.floor((Math.random()*3) + 1);
 				
-				var optimized_img = optimize(imageUrl);
+				var optimized_img = optimize(imageUrl, $('#art0'));
 				
 				$('#art0').css({
 					'background-image': 'url('+optimized_img+')'//'url(img/placeholder'+r+'.jpg)'
@@ -151,10 +151,10 @@ $(document).ready(function() {
 						var cell = "<div class='cell' id='art"+(index+1)+"'>"+name+tags+img+"</div>";
 						
 						$('#content').append(cell);
-						var optimized_img = optimize(imageUrl);
+						var optimized_img = optimize(imageUrl, $('#art'+(index+1)));
 						var r = Math.floor((Math.random()*3) + 1);
 						$('#art'+(index+1)).css({
-							'background-image': 'url('+optimize(imageUrl)+')'//'url(img/placeholder'+r+'.jpg)'
+							'background-image': 'url('+optimized_img+')'//'url(img/placeholder'+r+'.jpg)'
 						});
 						$('#art'+(index+1)).slideDown("slow");
 					}
@@ -171,14 +171,33 @@ $(document).ready(function() {
 		}
 	});
 	
-	function optimize(url) {
-		var optimized_img = "";
-		var u = "http://franciscompany.org/process_image.php?img_url="+url;
-		$.get(u, function(data, status) {
-			optimized_img = data;
+	function optimize(url, cell) {
+		var optimized_img = "http://franciscompany.org/image_process/";
+		
+		if(url == undefined) {
+			var r = Math.floor((Math.random()*3) + 1);
+			return 'img/placeholder'+r+'.jpg)';
+		}
+
+		$.ajax({
+			type: "GET",
+			url: "http://franciscompany.org/process_image.php",
+			processData: true,
+			data: {img_url: url},
+			dataType: 'jsonp',
+			success: function (data) {
+				optimized_img = data;
+			}
 		});
-		return optimized_img;
+		var fileName = url.substring(url.lastIndexOf('/') + 1);
+		
+		return optimized_img + fileName;
 	}
+	
+	function parseResults(results) {
+		console.debug("hello? "+results);
+	}
+
 });
 
 

@@ -144,7 +144,7 @@ input[name='query']:active {
 	z-index: 0;
 	background: #111010;
 	background-size: 100%;
-	background-position-y: -50px;
+	background-position-y: -100px;
 	height: 7em;
 	opacity: .9;
 	color: rgba(255,255,255,0.76);
