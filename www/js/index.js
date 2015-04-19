@@ -53,6 +53,26 @@ $(document).ready(function() {
 		}
 	});
 	
+	$('#content').on('click', '.cell', function() {
+		var $name = $(this).children('h2').text();
+		var $tags = $(this).children('p').text();
+		var $imgurl = $(this).children('img').attr('src');
+		console.debug($(this).children('img'));
+		var $html = "<div id='header'><h2>"+$name+"</h2><p>"+$tags+"</p></div>"
+		
+		// swipe out old view
+		$('#content').hide("slide", { direction: "left" }, 500, function() {		
+			$('#content').html($html); // insert new one
+			$('#content').css({'margin-left': '0', 'margin-right': '0'});
+			$('#header').css({
+				  'background-image': "url('"+$imgurl+"')"
+			});
+		}); 
+		// slide in new view
+		$('#content').show("slide", { direction: "right" }, 500, function() {});
+		
+	});
+	
 	$('#search').keypress(function( event ) {
 		if ( event.which == 13 ) {
 			event.preventDefault();
@@ -69,12 +89,12 @@ $(document).ready(function() {
 						"&bucket=genre";
 						
 			var similarUrl = 	"http://developer.echonest.com/api/v4/artist/similar?api_key=" +
-						"DW2FLRWMOF77QF6S8" +
-						"&format=json" +
-						"&name=" + query +
-						"&results=7" +
-						"&bucket=images" +
-						"&bucket=genre";
+								"DW2FLRWMOF77QF6S8" +
+								"&format=json" +
+								"&name=" + query +
+								"&results=7" +
+								"&bucket=images" +
+								"&bucket=genre";
 			
 			var $artists;
 			$.get(url, function(data, status) {
@@ -99,15 +119,17 @@ $(document).ready(function() {
 					tags += "#"+value.name+" ";
 				});
 				tags += "</p>";
+				
 				var name = "<h2 id='name'>"+$artists[0].name+"</h2>";
-				var cell = "<div class='cell' id='art0'>"+name+tags+"</div>";
+				var img = "<img style='display: none;' src='"+imageUrl+"' />";
+				var cell = "<div class='cell' id='art0'>"+name+tags+img+"</div>";
 				
 				$('#content').append(cell);
 				var r = Math.floor((Math.random()*3) + 1);
 				$('#art0').css({
-					'background-image': 'url(img/placeholder'+r+'.jpg)',
-					opacity: '.9'
+					'background-image': 'url(img/placeholder'+r+'.jpg)'
 				});
+				$('#art0').slideDown("slow");
 				
 				$.get(similarUrl, function(data2, status2) {
 					$artists = data2.response.artists;
@@ -122,14 +144,16 @@ $(document).ready(function() {
 						tags += "</p>";
 						
 						var name = "<h2 id='name'>"+$artists[index].name+"</h2>";
-						var cell = "<div class='cell' id='art"+(index+1)+"'>"+name+tags+"</div>";
+						var img = "<img style='display: none;' src='"+imageUrl+"' />";
+						var cell = "<div class='cell' id='art"+(index+1)+"'>"+name+tags+img+"</div>";
 						
 						$('#content').append(cell);
+						
 						var r = Math.floor((Math.random()*3) + 1);
 						$('#art'+(index+1)).css({
-							'background-image': 'url(img/placeholder'+r+'.jpg)',
-							opacity: '.9'
+							'background-image': 'url(img/placeholder'+r+'.jpg)'
 						});
+						$('#art'+(index+1)).slideDown("slow");
 					}
 					window.plugins.toast.show('(ﾉ≧∀≦)ﾉ Success!', 'long', 'bottom', 
 											function(a){console.log('toast success: ' + a)}, 
