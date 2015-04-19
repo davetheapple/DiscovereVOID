@@ -43,6 +43,7 @@ var app = {
 
 $(document).ready(function() {
 	var $q = $('input[name="query"]');
+	var in_artist = false;
 	
 	$('#content').on('click', '.cell', function() {
 		$(this).animate({opacity: '.5'}, function() { $(this).animate({opacity: '.9'}); });
@@ -54,17 +55,20 @@ $(document).ready(function() {
 		$('#header').css({
 			  'background-image': "url('"+$imgurl+"')"
 		});
-		 /*
-		// swipe out old view
-		$('#content').hide("slide", { direction: "left" }, 500, function() {		
-			$('#content').html($html); // insert new one
-			$('#content').css({'margin-left': '0', 'margin-right': '0'});
-			$('#header').css({
-				  'background-image': "url('"+$imgurl+"')"
-			});
-		}); 
-		// slide in new view
-		$('#content').show("slide", { direction: "right" }, 500, function() {});*/
+		in_artist = true;
+		var client_id = "9efa09e998c48f23a554e02042d84a91";
+		
+		var jsonSC;
+		var songs = "";
+		var urlSC = "http://api.soundcloud.com/search?client_id="+client_id+"&q="+$name;
+		$.get(urlSC, function(data, status) {
+			
+			jsonSC = data.collection;
+			songs = "<iframe width='100%' height='166' scrolling='no' frameborder='no' src='https://w.soundcloud.com/player/?url="+jsonSC[0].uri+"&color=0066cc'></iframe>"
+			$('#content').append(songs);
+			
+		});
+		
 		
 	});
 	
@@ -72,6 +76,7 @@ $(document).ready(function() {
 		if ( event.which == 13 ) {
 			event.preventDefault();
 			$q.blur();
+			in_artist = false;
 			
 			$('#content').html('');
 			var query = $q.val();
