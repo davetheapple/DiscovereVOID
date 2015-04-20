@@ -44,8 +44,13 @@ var app = {
 $(document).ready(function() {
 	var $q = $('input[name="query"]');
 	var in_artist = false;
+	console.log(window.location.host);
 	
-	$('#content').on('click', '.cell', function() {
+	$('#content').on('click', '.cell', displayArtistProfile);
+	$('#search').keypress(getSimilar); 
+
+	
+	function displayArtistProfile() {
 		$(this).animate({opacity: '.5'}, function() { $(this).animate({opacity: '.9'}); });
 		var $name = $(this).children('h2').text();
 		var $tags = $(this).children('p').text();
@@ -64,21 +69,21 @@ $(document).ready(function() {
 		$.get(urlSC, function(data, status) {
 			
 			jsonSC = data.collection;
-			songs = "<iframe width='100%' height='166' scrolling='no' frameborder='no' src='https://w.soundcloud.com/player/?url="+jsonSC[0].uri+"&color=0066cc'></iframe>"
+			songs = "<iframe width='100%' height='166' scrolling='no' frameborder='no' src='https://w.soundcloud.com/player/?url="+jsonSC[0].uri+"&color=0066cc'></iframe>";
 			$('#content').append(songs);
 			
 		});
-		
-		
-	});
+	}
 	
-	$('#search').keypress(function( event ) {
+	function getSimilar( event ) {
+		var $q = $('input[name="query"]');
 		if ( event.which == 13 ) {
 			event.preventDefault();
 			$q.blur();
 			in_artist = false;
 			
 			$('#content').html('');
+			
 			var query = $q.val();
 			var url = 	"http://developer.echonest.com/api/v4/artist/search?api_key=" +
 						"DW2FLRWMOF77QF6S8" +
@@ -87,116 +92,72 @@ $(document).ready(function() {
 						"&results=1" +
 						"&bucket=images" +
 						"&bucket=genre";
-						
-			var similarUrl = 	"http://developer.echonest.com/api/v4/artist/similar?api_key=" +
-								"DW2FLRWMOF77QF6S8" +
-								"&format=json" +
-								"&name=" + query +
-								"&results=7" +
-								"&bucket=images" +
-								"&bucket=genre";
 			
 			var $artists;
-			$.get(url, function(data, status) {
-			
-				/*
-					v Object
-						v response: Object
-							v artists: Array[1]
-								v 0: Object
-								> genres: Array[2]
-								  id: "ARV3CRH1187B9A1B21"
-								> images: Array[15]
-								  name: "Green Day"
-				*/
-				
-				console.debug(data);
-				$artists = data.response.artists;
-				var imageUrl = $artists[0].images[0].url;
-				
-				var tags = "<p>";
-				$($artists[0].genres).each(function(index, value){
-					tags += "#"+value.name+" ";
-				});
-				tags += "</p>";
-				
-				var name = "<h2 id='name'>"+$artists[0].name+"</h2>";
-				var img = "<img style='display: none;' src='"+imageUrl+"' />";
-				var cell = "<div class='cell' id='art0'>"+name+tags+img+"</div>";
-				
-				$('#content').append(cell);
-				var r = Math.floor((Math.random()*3) + 1);
-				
-				var optimized_img = optimize(imageUrl, $('#art0'));
-				
-				$('#art0').css({
-					'background-image': 'url('+optimized_img+')'//'url(img/placeholder'+r+'.jpg)'
-				});
-				$('#art0').slideDown("slow");
-				
-				$.get(similarUrl, function(data2, status2) {
-					$artists = data2.response.artists;
-					console.debug($artists);
-					for(var index = 0; index < $artists.length; index++) {
-						var imageUrl = $artists[index].images[index].url;
-						
-						var tags = "<p>";
-						$($artists[index].genres).each(function(index, value){
-							tags += "#"+value.name+" ";
-						});
-						tags += "</p>";
-						
-						var name = "<h2 id='name'>"+$artists[index].name+"</h2>";
-						var img = "<img style='display: none;' src='"+imageUrl+"' />";
-						var cell = "<div class='cell' id='art"+(index+1)+"'>"+name+tags+img+"</div>";
-						
-						$('#content').append(cell);
-						var optimized_img = optimize(imageUrl, $('#art'+(index+1)));
-						var r = Math.floor((Math.random()*3) + 1);
-						$('#art'+(index+1)).css({
-							'background-image': 'url('+optimized_img+')'//'url(img/placeholder'+r+'.jpg)'
-						});
-						$('#art'+(index+1)).slideDown("slow");
-					}
-					window.plugins.toast.show('(ﾉ≧∀≦)ﾉ Success!', 'long', 'bottom', 
-											function(a){console.log('toast success: ' + a)}, 
-											function(b){alert('toast error: ' + b)})
-				});
-				
-				
-			});// end of get
-			
-			
+			$.get(url, getArtist);
 			
 		}
-	});
+	}
 	
-	function optimize(url, cell) {
-		var optimized_img = "http://franciscompany.org/image_process/";
+	function getArtist(data, status) {
+		var query = $('input[name="query"]').val();
+		$artists = data.response.artists;
+		var similarUrl = 	"http://developer.echonest.com/api/v4/artist/similar?api_key=" +
+							"DW2FLRWMOF77QF6S8" +
+							"&format=json" +
+							"&name=" + query +
+							"&results=7" +
+							"&bucket=images" +
+							"&bucket=genre";
 		
-		if(url == undefined) {
-			var r = Math.floor((Math.random()*3) + 1);
-			return 'img/placeholder'+r+'.jpg)';
+		for(var index = 0; index < $artists.length; index++) {
+			var imageUrl = $artists[index].images[index].url;
+			var id = 'art'+($artists.length > 1 ? index+1 : 0);
+			
+			var tags = "<p>";
+			$($artists[index].genres).each(function(index, value){
+				tags += "#"+value.name+" ";
+			});
+			tags += "</p>";
+			
+			var name = "<h2 id='name'>"+$artists[index].name+"</h2>";
+			var img = "<img style='display: none;' src='"+imageUrl+"' />";
+			var cell = "<div class='cell' id='"+id+"'>"+name+tags+img+"</div>";
+			
+			$('#content').append(cell);
+			fetchImage(imageUrl, id);
+			$('#'+id).slideDown("slow");
+		}
+		if($artists.length == 1) $.get(similarUrl, getArtist);
+		window.plugins.toast.show('(ﾉ≧∀≦)ﾉ Success!', 'long', 'bottom');
+				
+	}
+	
+	function fetchImage(imgUrl, id) {
+		
+		var default_img = 'img/placeholder' + Math.floor((Math.random()*3) + 1) + '.jpg';
+		if(imgUrl != undefined) {
+			
+			window.myCallback = function(data) {
+				default_img = data.url;
+			};
+
+			var url = "http://franciscompany.org/process_image.php";
+			$.ajax({
+				url: url,
+				type: 'GET',
+				dataType: 'jsonp',
+				jsonp: true,
+				data: { image: imgUrl }, 
+				success: function(data) {
+					default_img = data.url;
+				}
+			});
 		}
 
-		$.ajax({
-			type: "GET",
-			url: "http://franciscompany.org/process_image.php",
-			processData: true,
-			data: {img_url: url},
-			dataType: 'jsonp',
-			success: function (data) {
-				optimized_img = data;
-			}
-		});
-		var fileName = url.substring(url.lastIndexOf('/') + 1);
-		
-		return optimized_img + fileName;
+		$('#'+id).css('background-image', 'url('+default_img+')');
 	}
-	
-	function parseResults(results) {
-		console.debug("hello? "+results);
-	}
+
 
 });
 
