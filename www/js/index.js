@@ -137,23 +137,24 @@ $(document).ready(function() {
 		
 		var default_img = 'img/placeholder' + Math.floor((Math.random()*3) + 1) + '.jpg';
 		if(imgUrl != undefined) {
-			
-			window.myCallback = function(data) {
-				default_img = data.url;
-			};
-
+			/*
 			var url = "http://franciscompany.org/process_image.php";
 			$.ajax({
-				url: url,
 				type: 'GET',
-				dataType: 'jsonp',
-				jsonp: true,
-				data: { image: imgUrl }, 
-				success: function(data) {
-					default_img = data.url;
+				dataType: 'text',
+				url: url,
+				data: {"image": imgUrl},
+				success:function(data, status, x){
+					console.log("data: ");
+					console.debug(data);
+				},
+				error: function(e) {
+					console.log("error "+e.message);
 				}
-			});
-		}
+			});*/
+			default_img = imgUrl;
+		 }
+				
 
 		$('#'+id).css('background-image', 'url('+default_img+')');
 	}
