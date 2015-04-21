@@ -60,9 +60,9 @@ $(document).ready(function() {
 
 	function displayArtistProfile() {
 	
-		$('.cell').animate({left: '-500px', opacity: '0'}, 500, function(){
+		$('.cell').animate({left: '-400px', opacity: '0'}, 500, function(){}).queue(function(){
 		
-			var $name = $(this).children('h2').text();
+		var $name = $(this).children('h2').text();
 			var $tags = $(this).children('p').text();
 			var $imgurl = $(this).children('img').attr('src');
 			var $html = "<div id='header'><span class='section' data-section='"+section+"'></span><h2>"+$name+"</h2><p>"+$tags+"</p></div>"
@@ -84,7 +84,7 @@ $(document).ready(function() {
 				$('#content').append(songs);
 				
 			});
-		});
+			});
 	}
 	
 	function getSimilar( event ) {
