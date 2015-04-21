@@ -41,11 +41,19 @@ var app = {
     }
 };
 
+function onBackKeyDown(evt) {
+	evt.preventDefault();
+	evt.stopPropagation();
+	if($('.class').data('section').val() == "profile") {
+		$('#content').html('');
+	}
+}
+
 $(document).ready(function() {
 	var $q = $('input[name="query"]');
 	var in_artist = false;
-	console.log(window.location.host);
-	
+	var section = "home";
+
 	$('#content').on('click', '.cell', displayArtistProfile);
 	$('#search').keypress(getSimilar); 
 
@@ -55,7 +63,7 @@ $(document).ready(function() {
 		var $name = $(this).children('h2').text();
 		var $tags = $(this).children('p').text();
 		var $imgurl = $(this).children('img').attr('src');
-		var $html = "<div id='header'><h2>"+$name+"</h2><p>"+$tags+"</p></div>"
+		var $html = "<div id='header'><span class='section' data-section='"+section+"'></span><h2>"+$name+"</h2><p>"+$tags+"</p></div>"
 		$('#content').html($html);
 		$('#header').css({
 			  'background-image': "url('"+$imgurl+"')"
@@ -69,6 +77,7 @@ $(document).ready(function() {
 		$.get(urlSC, function(data, status) {
 			
 			jsonSC = data.collection;
+			console.debug(data);
 			songs = "<iframe width='100%' height='166' scrolling='no' frameborder='no' src='https://w.soundcloud.com/player/?url="+jsonSC[0].uri+"&color=0066cc'></iframe>";
 			$('#content').append(songs);
 			
@@ -81,6 +90,8 @@ $(document).ready(function() {
 			event.preventDefault();
 			$q.blur();
 			in_artist = false;
+			url = "http://franciscompany.org/process_image/process.php?delete=true";
+			$.get(url, function(d) {});
 			
 			$('#content').html('');
 			
@@ -106,7 +117,7 @@ $(document).ready(function() {
 							"DW2FLRWMOF77QF6S8" +
 							"&format=json" +
 							"&name=" + query +
-							"&results=7" +
+							"&results=10" +
 							"&bucket=images" +
 							"&bucket=genre";
 		
@@ -121,42 +132,41 @@ $(document).ready(function() {
 			tags += "</p>";
 			
 			var name = "<h2 id='name'>"+$artists[index].name+"</h2>";
-			var img = "<img style='display: none;' src='"+imageUrl+"' />";
-			var cell = "<div class='cell' id='"+id+"'>"+name+tags+img+"</div>";
+			var cell = "<div class='cell' id='"+id+"'>"+name+tags+"</div>";
 			
 			$('#content').append(cell);
 			fetchImage(imageUrl, id);
-			$('#'+id).slideDown("slow");
+			$('.cell').css({height: '70px', opacity: '0.9'});
+
 		}
-		if($artists.length == 1) $.get(similarUrl, getArtist);
+		if($artists.length == 1) {
+			$.get(similarUrl, getArtist);
+		}
 		window.plugins.toast.show('(ﾉ≧∀≦)ﾉ Success!', 'long', 'bottom');
 				
 	}
 	
 	function fetchImage(imgUrl, id) {
 		
-		var default_img = 'img/placeholder' + Math.floor((Math.random()*3) + 1) + '.jpg';
-		if(imgUrl != undefined) {
-			/*
-			var url = "http://franciscompany.org/process_image.php";
-			$.ajax({
-				type: 'GET',
-				dataType: 'text',
-				url: url,
-				data: {"image": imgUrl},
-				success:function(data, status, x){
-					console.log("data: ");
-					console.debug(data);
-				},
-				error: function(e) {
-					console.log("error "+e.message);
-				}
-			});*/
-			default_img = imgUrl;
-		 }
-				
-
-		$('#'+id).css('background-image', 'url('+default_img+')');
+		var default_img;
+		var url = "http://franciscompany.org/process_image/process.php";
+		$.ajax({
+			type: 'GET',
+			dataType: 'text',
+			url: url,
+			data: {image: imgUrl},
+			success:function(data){
+				console.log("data: "+data);
+				console.debug(data);
+				default_img = "http://franciscompany.org/process_image/images/" + data;
+				$('#'+id).css('background-image', 'url('+default_img+')');
+			},
+			error: function(e) {
+				console.log("error "+e.message);
+				default_img = 'img/placeholder' + Math.floor((Math.random()*3) + 1) + '.jpg';
+				$('#'+id).css('background-image', 'url('+default_img+')');
+			}
+		});
 	}
 
 
