@@ -45,7 +45,7 @@ var app = {
 function onBackKeyDown(evt) {
 	evt.preventDefault();
 	evt.stopPropagation();
-	if($('.class').data('section').val() == "profile") {
+	if($('.section').data('section').val() == "profile") {
 		$('#content').html('');
 	}
 }
@@ -58,30 +58,32 @@ $(document).ready(function() {
 	$('#content').on('click', '.cell', displayArtistProfile);
 	$('#search').keypress(getSimilar); 
 
-	
 	function displayArtistProfile() {
-		$(this).animate({opacity: '.5'}, function() { $(this).animate({opacity: '.9'}); });
-		var $name = $(this).children('h2').text();
-		var $tags = $(this).children('p').text();
-		var $imgurl = $(this).children('img').attr('src');
-		var $html = "<div id='header'><span class='section' data-section='"+section+"'></span><h2>"+$name+"</h2><p>"+$tags+"</p></div>"
-		$('#content').html($html);
-		$('#header').css({
-			  'background-image': "url('"+$imgurl+"')"
-		});
-		in_artist = true;
-		var client_id = "9efa09e998c48f23a554e02042d84a91";
+	
+		$('.cell').animate({left: '-500px', opacity: '0'}, 500, function(){
 		
-		var jsonSC;
-		var songs = "";
-		var urlSC = "http://api.soundcloud.com/search?client_id="+client_id+"&q="+$name;
-		$.get(urlSC, function(data, status) {
+			var $name = $(this).children('h2').text();
+			var $tags = $(this).children('p').text();
+			var $imgurl = $(this).children('img').attr('src');
+			var $html = "<div id='header'><span class='section' data-section='"+section+"'></span><h2>"+$name+"</h2><p>"+$tags+"</p></div>"
+			$('#content').html($html);
+			$('#header').css({
+				  'background-image': "url('"+$imgurl+"')"
+			});
+			in_artist = true;
+			var client_id = "9efa09e998c48f23a554e02042d84a91";
 			
-			jsonSC = data.collection;
-			console.debug(data);
-			songs = "<iframe width='100%' height='166' scrolling='no' frameborder='no' src='https://w.soundcloud.com/player/?url="+jsonSC[0].uri+"&color=0066cc'></iframe>";
-			$('#content').append(songs);
-			
+			var jsonSC;
+			var songs = "";
+			var urlSC = "http://api.soundcloud.com/search?client_id="+client_id+"&q="+$name;
+			$.get(urlSC, function(data, status) {
+				
+				jsonSC = data.collection;
+				console.debug(data);
+				songs = "<iframe width='100%' height='166' scrolling='no' frameborder='no' src='https://w.soundcloud.com/player/?url="+jsonSC[0].uri+"&color=0066cc'></iframe>";
+				$('#content').append(songs);
+				
+			});
 		});
 	}
 	
@@ -123,7 +125,7 @@ $(document).ready(function() {
 							"&bucket=genre";
 		
 		for(var index = 0; index < $artists.length; index++) {
-			var imageUrl = $artists[index].images[index].url;
+			//var imageUrl = $artists[index].images[0].url;
 			var id = 'art'+($artists.length > 1 ? index+1 : 0);
 			
 			var tags = "<p>";
@@ -133,10 +135,11 @@ $(document).ready(function() {
 			tags += "</p>";
 			
 			var name = "<h2 id='name'>"+$artists[index].name+"</h2>";
+			/*<a href="./page1" class="animsition-link">animsition link 1</a>*/
 			var cell = "<div class='cell' id='"+id+"'>"+name+tags+"</div>";
 			
 			$('#content').append(cell);
-			fetchImage(imageUrl, id);
+			fetchImage(id, $artists[index].images, 0);
 			$('.cell').css({height: '70px', opacity: '0.9'});
 
 		}
@@ -147,8 +150,8 @@ $(document).ready(function() {
 				
 	}
 	
-	function fetchImage(imgUrl, id) {
-		
+	function fetchImage(id, imagelist, attempt) {
+		imgUrl = imagelist[attempt].url
 		var default_img;
 		var url = "http://franciscompany.org/process_image/process.php";
 		$.ajax({
@@ -163,9 +166,12 @@ $(document).ready(function() {
 				$('#'+id).css('background-image', 'url('+default_img+')');
 			},
 			error: function(e) {
-				console.log("error "+e.message);
-				default_img = 'img/placeholder' + Math.floor((Math.random()*3) + 1) + '.jpg';
-				$('#'+id).css('background-image', 'url('+default_img+')');
+				if(attempt < 5) {
+					fetchImage(id, imagelist, attempt+1);
+				} else {
+					default_img = 'img/placeholder' + Math.floor((Math.random()*3) + 1) + '.jpg';
+					$('#'+id).css('background-image', 'url('+default_img+')');
+				} 
 			}
 		});
 	}
