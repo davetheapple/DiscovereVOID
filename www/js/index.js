@@ -64,11 +64,13 @@ $(document).ready(function() {
 		
 		var $name = $(this).children('h2').text();
 			var $tags = $(this).children('p').text();
-			var $imgurl = $(this).children('img').attr('src');
+			var bg = $(this).css('background-image');
+			bg = bg.replace('url(','').replace(')','');
+			
 			var $html = "<div id='header'><span class='section' data-section='"+section+"'></span><h2>"+$name+"</h2><p>"+$tags+"</p></div>"
 			$('#content').html($html);
 			$('#header').css({
-				  'background-image': "url('"+$imgurl+"')"
+				  'background-image': "url('"+bg+"')"
 			});
 			in_artist = true;
 			var client_id = "9efa09e998c48f23a554e02042d84a91";
