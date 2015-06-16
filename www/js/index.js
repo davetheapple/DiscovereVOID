@@ -50,7 +50,19 @@ function onBackKeyDown(evt) {
 	}
 }
 
+var start = true;
+function loading() {
+	$( "#dot" ).animate({"margin-left": "100%"}, 2000, function(){
+		$(this).css("margin-left", "0");
+		console.log("start is " + start);
+		if(start) {
+			loading();
+		}
+	});
+}
+
 $(document).ready(function() {
+	
 	var $q = $('input[name="query"]');
 	var in_artist = false;
 	var section = "home";
@@ -93,6 +105,8 @@ $(document).ready(function() {
 		var $q = $('input[name="query"]');
 		if ( event.which == 13 ) {
 			event.preventDefault();
+			start = true;
+			loading();
 			$q.blur();
 			in_artist = false;
 			url = "http://franciscompany.org/process_image/process.php?delete=true";
@@ -130,29 +144,46 @@ $(document).ready(function() {
 			//var imageUrl = $artists[index].images[0].url;
 			var id = 'art'+($artists.length > 1 ? index+1 : 0);
 			
-			var tags = "<p>";
-			$($artists[index].genres).each(function(index, value){
-				tags += "#"+value.name+" ";
-			});
-			tags += "</p>";
+			var tags = "<p>"+$artists[index].genres[0].name+"</p>";
+			//$($artists[index].genres).each(function(index, value){
+			//	tags += "#"+value.name+" ";
+			//});
+			//tags += "</p>";
 			
 			var name = "<h2 id='name'>"+$artists[index].name+"</h2>";
 			/*<a href="./page1" class="animsition-link">animsition link 1</a>*/
 			var cell = "<div class='cell' id='"+id+"'>"+name+tags+"</div>";
 			
 			$('#content').append(cell);
-			fetchImage(id, $artists[index].images, 0);
+			
+			var default_img = 'img/placeholder' + Math.floor((Math.random()*3) + 1) + '.jpg';
+			$('#'+id).css('background-image', 'url('+default_img+')');
+			
+			//fetchImage(id, $artists[index].images, 0);
+			var img = $artists[index].images[0].url;
+			$('#'+id).css('background-image', 'url('+img+')');
 			$('.cell').css({height: '70px', opacity: '0.9'});
 
 		}
-		if($artists.length == 1) {
-			$.get(similarUrl, getArtist);
+		if($artists.length == 1) { 
+			$.get(similarUrl, getArtist); 
 		}
+		if($artists.length > 1) start = false;
 		window.plugins.toast.show('(ﾉ≧∀≦)ﾉ Success!', 'long', 'bottom');
 				
 	}
 	
 	function fetchImage(id, imagelist, attempt) {
+		var imgUrl = imagelist[attempt].url;
+		var request;
+		  request = $.ajax({
+		    type: "HEAD",
+		    url: imgUrl,
+		    success: function () {
+		      console.log("Size is " + request.getResponseHeader("Content-Length"));
+		    }
+		  });
+	/*
 		imgUrl = imagelist[attempt].url
 		var default_img;
 		var url = "http://franciscompany.org/process_image/process.php";
@@ -176,6 +207,7 @@ $(document).ready(function() {
 				} 
 			}
 		});
+		*/
 	}
 
 
