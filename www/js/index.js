@@ -53,7 +53,7 @@ function onBackKeyDown(evt) {
 var start = true;
 function loading() {
 	$( "#dot" ).animate({"margin-left": "100%"}, 2000, function(){
-		$(this).css("margin-left", "0");
+		$(this).css("margin-left", "-3px");
 		console.log("start is " + start);
 		if(start) {
 			loading();

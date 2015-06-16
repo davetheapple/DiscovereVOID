@@ -149,6 +149,7 @@ input[name='query']:active {
 	  width: 3px;
 	  background: white;
 	  opacity: .8;
+	  margin-left: -3px;
   }
 
 #content {
@@ -161,7 +162,7 @@ input[name='query']:active {
 .cell {
 	position: relative;
 	display: inline-block;
-	width: 200px;
+	width: 25%;
 	height: 400px;
 	vertical-align: top;
 	margin: 5px;
